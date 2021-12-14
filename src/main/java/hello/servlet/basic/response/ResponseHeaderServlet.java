@@ -32,6 +32,7 @@ public class ResponseHeaderServlet extends HttpServlet {
         //[Redirect 편의 Method]
         this.redirect(response);
 
+        //[Message body]
         PrintWriter writer = response.getWriter();
         writer.print("ok");
     }
