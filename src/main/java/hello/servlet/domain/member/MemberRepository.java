@@ -9,15 +9,14 @@ import java.util.concurrent.atomic.AtomicLong;
 public class MemberRepository {
 
     private static final Map<Long, Member> store = new ConcurrentHashMap<>();
+    private static final MemberRepository instance = new MemberRepository();
     private static AtomicLong sequence = new AtomicLong();
 
-    private static final MemberRepository instance = new MemberRepository();
+    private MemberRepository() {
+    }
 
     public static MemberRepository getInstance() {
         return instance;
-    }
-
-    private MemberRepository() {
     }
 
     public Member save(Member member) {
