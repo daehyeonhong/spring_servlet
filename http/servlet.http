@@ -2,3 +2,9 @@ POST localhost:8080/request-parameter
 Content-Type: application/x-www-form-urlencoded
 
 name=Kim&age=20
+
+###
+POST localhost:8080/request-body-string
+Content-Type: text/plain
+
+hello
