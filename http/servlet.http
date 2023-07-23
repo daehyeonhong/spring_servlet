@@ -23,3 +23,6 @@ GET localhost:8080/response-header
 
 ###
 GET localhost:8080/response-html
+
+###
+GET localhost:8080/response-json
