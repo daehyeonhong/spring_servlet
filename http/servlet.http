@@ -17,3 +17,6 @@ Content-Type: application/json
   "name": "Kim",
   "age": 20
 }
+
+###
+POST localhost:8080/response-header

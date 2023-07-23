@@ -15,13 +15,6 @@ import java.util.Arrays;
 public class RequestHeaderServlet extends HttpServlet {
     private static final Logger logger = LoggerFactory.getLogger(RequestHeaderServlet.class);
 
-    @Override
-    protected void service(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
-        printStartLine(request);
-        printHeaders(request);
-        printHeadUtils(request);
-    }
-
     private static void printStartLine(final HttpServletRequest request) {
         logger.info("=== REQUEST-LINE - START ===");
         logger.info("request.getMethod() = {}", request.getMethod());
@@ -71,5 +64,12 @@ public class RequestHeaderServlet extends HttpServlet {
         logger.info("request.getContentLength() = {}", request.getContentLength());
         logger.info("request.getCharacterEncoding() = {}", request.getCharacterEncoding());
         logger.info("=== Header 편의 조회 end ===");
+    }
+
+    @Override
+    protected void service(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
+        printStartLine(request);
+        printHeaders(request);
+        printHeadUtils(request);
     }
 }
