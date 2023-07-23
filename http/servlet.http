@@ -8,3 +8,12 @@ POST localhost:8080/request-body-string
 Content-Type: text/plain
 
 hello
+
+###
+POST localhost:8080/request-body-json
+Content-Type: application/json
+
+{
+  "name": "Kim",
+  "age": 20
+}
