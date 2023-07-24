@@ -10,14 +10,14 @@ import java.util.Map;
  */
 public class MemberRepository {
     private final static Map<Long, Member> store = new HashMap<>();
-    private static long SEQUENCE = 0L;
     private static final MemberRepository INSTANCE = new MemberRepository();
+    private static long SEQUENCE = 0L;
+
+    private MemberRepository() {
+    }
 
     public static MemberRepository getInstance() {
         return INSTANCE;
-    }
-
-    private MemberRepository() {
     }
 
     public Member save(final Member member) {

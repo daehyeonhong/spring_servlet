@@ -14,6 +14,15 @@ import java.io.IOException;
 public class ResponseHeaderServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(ResponseHeaderServlet.class);
 
+    private static void content(final HttpServletResponse response) {
+        // Content-Type: text/plain;charset=utf-8
+        // Content-Length: 2
+        // response.setHeader("Content-Type", "text/plain;charset=utf-8");
+        response.setContentType("text/plain");
+        response.setCharacterEncoding("utf-8");
+        // response.setContentLength(2);
+    }
+
     @Override
     protected void service(final HttpServletRequest request, final HttpServletResponse response) throws IOException {
         // [status-line]
@@ -29,15 +38,6 @@ public class ResponseHeaderServlet extends HttpServlet {
         cookie(response);
         redirect(response);
         response.getWriter().print("OK");
-    }
-
-    private static void content(final HttpServletResponse response) {
-        // Content-Type: text/plain;charset=utf-8
-        // Content-Length: 2
-        // response.setHeader("Content-Type", "text/plain;charset=utf-8");
-        response.setContentType("text/plain");
-        response.setCharacterEncoding("utf-8");
-        // response.setContentLength(2);
     }
 
     private void cookie(final HttpServletResponse response) {
