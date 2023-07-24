@@ -1,14 +1,4 @@
 package hello.servlet.basic;
 
-import lombok.Getter;
-import lombok.Setter;
-
-@Getter
-@Setter
-public class HelloData {
-
-    private String username;
-
-    private int age;
-
+public record HelloData(String name, int age) {
 }

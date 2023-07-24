@@ -1,32 +1,33 @@
 package hello.servlet.domain.member;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicLong;
 
+/**
+ * 동시성 문제가 고려되어 있지 않음, 실무에서는 ConcurrentHashMap, AtomicLong 사용 고려
+ */
 public class MemberRepository {
-
-    private static final Map<Long, Member> store = new ConcurrentHashMap<>();
-    private static final MemberRepository instance = new MemberRepository();
-    private static AtomicLong sequence = new AtomicLong();
+    private final static Map<Long, Member> store = new HashMap<>();
+    private static final MemberRepository INSTANCE = new MemberRepository();
+    private static long SEQUENCE = 0L;
 
     private MemberRepository() {
     }
 
     public static MemberRepository getInstance() {
-        return instance;
+        return INSTANCE;
     }
 
-    public Member save(Member member) {
-        member.setId(sequence.incrementAndGet());
-        this.store.put(member.getId(), member);
+    public Member save(final Member member) {
+        member.setId(++SEQUENCE);
+        store.put(member.getId(), member);
         return member;
     }
 
-    public Member findById(Long id) {
-        return this.store.get(id);
+    public Member findById(final Long id) {
+        return store.get(id);
     }
 
     public List<Member> findAll() {
@@ -36,5 +37,4 @@ public class MemberRepository {
     public void clearStore() {
         store.clear();
     }
-
 }

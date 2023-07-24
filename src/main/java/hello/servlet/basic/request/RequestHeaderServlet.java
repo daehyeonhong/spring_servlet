@@ -1,76 +1,75 @@
 package hello.servlet.basic.request;
 
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
+import java.util.Arrays;
 
 @WebServlet(name = "requestHeaderServlet", urlPatterns = "/request-header")
 public class RequestHeaderServlet extends HttpServlet {
+    private static final Logger logger = LoggerFactory.getLogger(RequestHeaderServlet.class);
+
+    private static void printStartLine(final HttpServletRequest request) {
+        logger.info("=== REQUEST-LINE - START ===");
+        logger.info("request.getMethod() = {}", request.getMethod());
+        logger.info("request.getProtocol() = {}", request.getProtocol());
+        logger.info("request.getScheme() = {}", request.getScheme());
+        logger.info("request.getRequestURL() = {}", request.getRequestURL());
+        logger.info("request.getRequestURI() = {}", request.getRequestURI());
+        logger.info("request.getQueryString() = {}", request.getQueryString());
+        logger.info("request.isSecure() = {}", request.isSecure());
+        logger.info("=== REQUEST-LINE - END ===");
+    }
+
+    private static void printHeaders(final HttpServletRequest request) {
+        logger.info("=== Headers - START ===");
+
+        request.getHeaderNames()
+                .asIterator()
+                .forEachRemaining(
+                        headerName -> logger.info("{}: {}", headerName, request.getHeader(headerName))
+                );
+
+        logger.info("=== Headers - END ===");
+        logger.info("");
+    }
+
+    private static void printHeadUtils(final HttpServletRequest request) {
+        logger.info("=== Header 편의 조회 start ===");
+        logger.info("[Host 편의 조회]");
+        logger.info("request.getServerName() = {}", request.getServerName());
+        logger.info("request.getServerPort() = {}", request.getServerPort());
+
+        logger.info("[Accept-Language 편의 조회]");
+        request.getLocales()
+                .asIterator()
+                .forEachRemaining(
+                        locale -> logger.info("locale = {}", locale)
+                );
+        logger.info("request.getLocale() = {}", request.getLocale());
+
+        logger.info("[cookie 편의 조회]");
+        Arrays.asList(request.getCookies())
+                .forEach(
+                        cookie -> logger.info("cookie = name: {}, value: {}", cookie.getName(), cookie.getValue())
+                );
+        logger.info("[Content 편의 조회]");
+        logger.info("request.getContentType() = {}", request.getContentType());
+        logger.info("request.getContentLength() = {}", request.getContentLength());
+        logger.info("request.getCharacterEncoding() = {}", request.getCharacterEncoding());
+        logger.info("=== Header 편의 조회 end ===");
+    }
 
     @Override
-    protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        this.printStartLine(request);
-        this.printHeaders(request);
-        this.printHeaderUtils(request);
-        this.printEtc(request);
+    protected void service(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
+        printStartLine(request);
+        printHeaders(request);
+        printHeadUtils(request);
     }
-
-    private void printEtc(HttpServletRequest request) {
-        System.out.println("[Remote 정보]");
-        System.out.println("request.getRemoteHost() = " + request.getRemoteHost());
-        System.out.println("request.getRemoteAddr() = " + request.getRemoteAddr());
-        System.out.println("request.getRemotePort() = " + request.getRemotePort());
-        System.out.println();
-
-        System.out.println("[Local 정보]");
-        System.out.println("request.getLocalName() = " + request.getLocalName());
-        System.out.println("request.getLocalAddr() = " + request.getLocalAddr());
-        System.out.println("request.getLocalPort() = " + request.getLocalPort());
-    }
-
-    private void printHeaderUtils(HttpServletRequest request) {
-        System.out.println("Host 편의 조회");
-        System.out.println("request.getServerName() = " + request.getServerName());
-        System.out.println("request.getServerPort() = " + request.getServerPort());
-        System.out.println();
-
-        System.out.println("[Accept-Language 편의 조회]");
-        request.getLocales().asIterator()
-                .forEachRemaining(locale -> System.out.println("locale = " + locale));
-        System.out.println();
-
-        System.out.println("[Cookie 편의 조회]");
-        if (request.getCookies() != null)
-            for (Cookie cookie : request.getCookies())
-                System.out.printf("%s : %s", cookie.getName(), cookie.getValue());
-
-        System.out.println();
-        System.out.println("[Content 편의 조회]");
-        System.out.println("request.getContentType() = " + request.getContentType());
-        System.out.println("request.getContentLength() = " + request.getContentLength());
-        System.out.println("request.getCharacterEncoding() = " + request.getCharacterEncoding());
-    }
-
-    private void printHeaders(HttpServletRequest request) {
-        request.getHeaderNames().asIterator()
-                .forEachRemaining(headerName ->
-                        System.out.printf("%s: %s", headerName, request.getHeader(headerName)));
-    }
-
-    private void printStartLine(HttpServletRequest request) {
-        System.out.println("request.getMethod() = " + request.getMethod());
-        System.out.println("request.getProtocol() = " + request.getProtocol());
-        System.out.println("request.getScheme() = " + request.getScheme());
-
-        System.out.println("request.getRequestURL() = " + request.getRequestURL());
-        System.out.println("request.getRequestURI() = " + request.getRequestURI());
-
-        System.out.println("request.getQueryString() = " + request.getQueryString());
-        System.out.println("request.isSecure() = " + request.isSecure());
-    }
-
 }

@@ -2,48 +2,54 @@ package hello.servlet.web.servlet;
 
 import hello.servlet.domain.member.Member;
 import hello.servlet.domain.member.MemberRepository;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 
 @WebServlet(name = "memberSaveServlet", urlPatterns = "/servlet/members/save")
 public class MemberSaveServlet extends HttpServlet {
-
-    private MemberRepository memberRepository = MemberRepository.getInstance();
+    private static final Logger logger = LoggerFactory.getLogger(MemberSaveServlet.class);
+    private static final MemberRepository memberRepository = MemberRepository.getInstance();
 
     @Override
-    protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String username = request.getParameter("username");
-        int age = Integer.parseInt(request.getParameter("age"));
+    protected void service(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
+        logger.info("memberSaveServlet.service");
 
-        Member member = new Member(username, age);
-        this.memberRepository.save(member);
+        final String username = request.getParameter("username");
+        final int age = Integer.parseInt(request.getParameter("age"));
+
+        final Member member = new Member(username, age);
+
+        memberRepository.save(member);
 
         response.setContentType("text/html");
-        response.setCharacterEncoding("UTF-8");
-        PrintWriter writer = response.getWriter();
-        writer.write(
-                "<!doctype html>\n" +
-                        "<html lang=\"en\">\n" +
-                        "<head>\n" +
-                        "    <meta charset=\"UTF-8\">\n" +
-                        "    <meta name=\"viewport\" content=\"width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0\">\n" +
-                        "    <meta http-equiv=\"X-UA-Compatible\" content=\"ie=edge\">\n" +
-                        "    <title>FormSuccess</title>\n" +
-                        "</head>\n" +
-                        "<body>\n" +
-                        "<h1>성공!</h1>" +
-                        "<ul>\n" +
-                        "    <li>id=" + member.getId() + "</li>\n" +
-                        "    <li>username=" + member.getUsername() + "</li>\n" +
-                        "    <li>age=" + member.getAge() + "</li>\n" +
-                        "</ul>" +
-                        "<a href=\"/index.html\">메인</a>" +
-                        "</body>\n" +
-                        "</html>\n");
+        response.setCharacterEncoding("utf-8");
+
+        final PrintWriter writer = response.getWriter();
+        writer.println("""
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Title</title>
+                </head>
+                <body>
+                성공
+                <ul>
+                    <li>id=%d</li>
+                    <li>username=%s</li>
+                    <li>age=%d</li>
+                </ul>
+                <a href="/index.html">메인</a>
+                </body>
+                </html>
+                """.formatted(member.getId(), member.getUsername(), member.getAge()));
     }
 }
