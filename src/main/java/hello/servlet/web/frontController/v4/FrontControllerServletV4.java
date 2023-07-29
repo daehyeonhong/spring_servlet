@@ -45,7 +45,7 @@ public class FrontControllerServletV4 extends HttpServlet {
         return new MyView("/WEB-INF/views/" + viewName + ".jsp");
     }
 
-    private static HashMap<String, String> createParameterMap(final HttpServletRequest request) {
+    private static Map<String, String> createParameterMap(final HttpServletRequest request) {
         final var parameterMap = new HashMap<String, String>();
         request.getParameterNames()
                 .asIterator()
