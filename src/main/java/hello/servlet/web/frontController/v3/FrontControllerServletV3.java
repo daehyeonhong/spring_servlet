@@ -12,8 +12,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @WebServlet(name = "frontControllerServletV3", urlPatterns = "/front-controller/v3/*")
 public class FrontControllerServletV3 extends HttpServlet {
@@ -46,11 +48,12 @@ public class FrontControllerServletV3 extends HttpServlet {
         return new MyView("/WEB-INF/views/" + viewName + ".jsp");
     }
 
-    private static Map<String, String> createParameterMap(final HttpServletRequest request) {
-        final var parameterMap = new HashMap<String, String>();
-        request.getParameterNames()
-                .asIterator()
-                .forEachRemaining(paramName -> parameterMap.put(paramName, request.getParameter(paramName)));
-        return parameterMap;
+    private Map<String, String> createParameterMap(final HttpServletRequest request) {
+        return Collections.list(request.getParameterNames())
+                .stream()
+                .collect(Collectors.toMap(
+                        paramName -> paramName,
+                        request::getParameter
+                ));
     }
 }
