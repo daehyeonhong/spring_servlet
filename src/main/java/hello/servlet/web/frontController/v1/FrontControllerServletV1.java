@@ -25,8 +25,8 @@ public class FrontControllerServletV1 extends HttpServlet {
 
     @Override
     protected void service(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
-        final String requestURI = request.getRequestURI();
-        final ControllerV1 controller = this.controllerMap.get(requestURI);
+        final var requestURI = request.getRequestURI();
+        final var controller = this.controllerMap.get(requestURI);
         if (controller == null) response.setStatus(HttpServletResponse.SC_NOT_FOUND);
         else controller.process(request, response);
     }
