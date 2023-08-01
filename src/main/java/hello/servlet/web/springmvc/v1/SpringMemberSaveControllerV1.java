@@ -2,25 +2,27 @@ package hello.servlet.web.springmvc.v1;
 
 import hello.servlet.domain.member.Member;
 import hello.servlet.domain.member.MemberRepository;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class SpringMemberSaveControllerV1 {
-
     private final MemberRepository memberRepository = MemberRepository.getInstance();
 
     @RequestMapping(value = "/springmvc/v1/members/save")
-    public ModelAndView process(HttpServletRequest request) {
-        String username = request.getParameter("username");
-        int age = Integer.parseInt(request.getParameter("age"));
+    public ModelAndView process(final HttpServletRequest request, final HttpServletResponse response) {
+        final String username = request.getParameter("username");
+        final int age = Integer.parseInt(request.getParameter("age"));
+        final Member member = new Member(username, age);
+        memberRepository.save(member);
 
-        Member member = new Member(username, age);
-        this.memberRepository.save(member);
-
-        return new ModelAndView("save-result").addObject("member", member);
+        final ModelAndView modelAndView = new ModelAndView("save-result");
+        modelAndView.addObject("member", member);
+        return modelAndView;
     }
 
 }

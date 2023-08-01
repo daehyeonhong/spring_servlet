@@ -9,31 +9,36 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+
+import java.util.List;
+
 @Controller
 @RequestMapping(value = "/springmvc/v3/members")
 public class SpringMemberControllerV3 {
-
     private final MemberRepository memberRepository = MemberRepository.getInstance();
 
+
+    @GetMapping(value = "/new-form")
+    public String newForm() {
+        return "new-form";
+    }
+
     @PostMapping(value = "/save")
-    public String process(@RequestParam String username,
-                          @RequestParam int age,
-                          Model model) {
-        Member member = new Member(username, age);
-        this.memberRepository.save(member);
+    public String save(@RequestParam(value = "username") final String username,
+                       @RequestParam(value = "age") final int age,
+                       final Model model) {
+        final Member member = new Member(username, age);
+        memberRepository.save(member);
         model.addAttribute("member", member);
         return "save-result";
     }
 
-    @GetMapping(value = "/new-form")
-    public String save() {
-        return "new-form";
-    }
 
-    @GetMapping(value = "")
-    public String list(Model model) {
-        model.addAttribute("members", this.memberRepository.findAll());
+    @GetMapping
+    public String members(final Model model) {
+        final List<Member> members = this.memberRepository.findAll();
+
+        model.addAttribute("members", members);
         return "members";
     }
-
 }
