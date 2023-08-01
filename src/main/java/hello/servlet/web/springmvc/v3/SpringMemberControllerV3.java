@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+
 import java.util.List;
 
 @Controller
@@ -28,10 +29,10 @@ public class SpringMemberControllerV3 {
                        final Model model) {
         final Member member = new Member(username, age);
         memberRepository.save(member);
-
         model.addAttribute("member", member);
         return "save-result";
     }
+
 
     @GetMapping
     public String members(final Model model) {
